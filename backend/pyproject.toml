@@ -1,0 +1,16 @@
+[project]
+name = "monad-ai-concierge-backend"
+version = "1.0.0"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "fastapi==0.142.1",
+  "uvicorn==0.54.0",
+  "pydantic==2.13.5",
+  "pydantic-settings==2.15.0",
+  "web3==8.0.0",
+  "google-genai==2.25.0",
+  "httpx==0.28.1",
+]
+
+[tool.vercel]
+entrypoint = "app.main:app"

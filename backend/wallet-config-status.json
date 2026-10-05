@@ -1,0 +1,5 @@
+{
+  "observed_at": "2026-10-04T13:57:58.594Z",
+  "status": 403,
+  "message": "Wallet domain is not allowed by ZeroDev. Add this website origin to the project RPC domain allowlist, then retry the fee estimate."
+}

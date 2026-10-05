@@ -1,0 +1,272 @@
+[
+  {
+    "id": "v4-feeontransferdetector-monad-testnet",
+    "protocol": "v4",
+    "contract": "FeeOnTransferDetector",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x9805fa7a43C3e96E9cb73B41172660F52CA04d74",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v4-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/util-contracts/blob/main/src/FeeOnTransferDetector.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x9805fa7a43C3e96E9cb73B41172660F52CA04d74",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-uniswapv3factory-monad-testnet",
+    "protocol": "v3",
+    "contract": "UniswapV3Factory",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x961235a9020B05C44DF1026D956D1F4D78014276",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-core/blob/main/contracts/UniswapV3Factory.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x961235a9020B05C44DF1026D956D1F4D78014276",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-nonfungiblepositionmanager-monad-testnet",
+    "protocol": "v3",
+    "contract": "NonfungiblePositionManager",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x3dCc735C74F10FE2B9db2BB55C40fbBbf24490f7",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-periphery/blob/main/contracts/NonfungiblePositionManager.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x3dCc735C74F10FE2B9db2BB55C40fbBbf24490f7",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-quoterv2-monad-testnet",
+    "protocol": "v3",
+    "contract": "QuoterV2",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x1b4E313fEF15630AF3e6F2dE550Dbf4cC9D3081d",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-periphery/blob/main/contracts/lens/QuoterV2.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x1b4E313fEF15630AF3e6F2dE550Dbf4cC9D3081d",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-ticklens-monad-testnet",
+    "protocol": "v3",
+    "contract": "TickLens",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x337478Eb6058455ecb3696184B30dd6A29E3a893",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-periphery/blob/main/contracts/lens/TickLens.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x337478Eb6058455ecb3696184B30dd6A29E3a893",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-v3migrator-monad-testnet",
+    "protocol": "v3",
+    "contract": "V3Migrator",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x0A78348b71f8AE8Caff2F8F9d4d74A2f36516661",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-periphery/blob/main/contracts/V3Migrator.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x0A78348b71f8AE8Caff2F8F9d4d74A2f36516661",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-nftdescriptor-monad-testnet",
+    "protocol": "v3",
+    "contract": "NFTDescriptor",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x2E9D45Bb7b30549F5216813aDA9a6b7982C5B3ED",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-periphery/blob/main/contracts/libraries/NFTDescriptor.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x2E9D45Bb7b30549F5216813aDA9a6b7982C5B3ED",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-uniswapinterfacemulticall-monad-testnet",
+    "protocol": "v3",
+    "contract": "UniswapInterfaceMulticall",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0xa707ceB989Cc3728551ed0E6E44B718Dd114CF44",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-periphery/blob/main/contracts/lens/UniswapInterfaceMulticall.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0xa707ceB989Cc3728551ed0E6E44B718Dd114CF44",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-swaprouter02-monad-testnet",
+    "protocol": "v3",
+    "contract": "SwapRouter02",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x4c4eABd5Fb1D1A7234A48692551eAECFF8194CA7",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/swap-router-contracts/blob/main/contracts/SwapRouter02.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x4c4eABd5Fb1D1A7234A48692551eAECFF8194CA7",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v3-quoter-monad-testnet",
+    "protocol": "v3",
+    "contract": "Quoter",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x1BA215c17565dE7b0Cb7eCaB971bcF540c24a862",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v3-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v3-periphery/blob/main/contracts/lens/Quoter.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x1BA215c17565dE7b0Cb7eCaB971bcF540c24a862",
+    "env": "testnet",
+    "status": "deprecated",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v2-uniswapv2factory-monad-testnet",
+    "protocol": "v2",
+    "contract": "UniswapV2Factory",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x733E88f248b742db6C14C0b1713Af5AD7fDd59D0",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v2-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v2-core/blob/master/contracts/UniswapV2Factory.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x733E88f248b742db6C14C0b1713Af5AD7fDd59D0",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "v2-uniswapv2router02-monad-testnet",
+    "protocol": "v2",
+    "contract": "UniswapV2Router02",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0xfB8e1C3b833f9E67a71C859a132cf783b645e436",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/v2-core",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/v2-periphery/blob/master/contracts/UniswapV2Router02.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0xfB8e1C3b833f9E67a71C859a132cf783b645e436",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "permit2-permit2-monad-testnet",
+    "protocol": "permit2",
+    "contract": "Permit2",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/permit2",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/permit2/blob/main/src/Permit2.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x000000000022D473030F116dDEE9F6B43aC78BA3",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "universal-router-universalrouter-monad-testnet",
+    "protocol": "universal-router",
+    "contract": "UniversalRouter",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x3aE6D8A282D67893e17AA70ebFFb33EE5aa65893",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/universal-router",
+    "sourceRef": "cba26cd",
+    "sourceCodeUrl": "https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x3aE6D8A282D67893e17AA70ebFFb33EE5aa65893",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  },
+  {
+    "id": "universal-router-swapproxy-monad-testnet",
+    "protocol": "universal-router",
+    "contract": "SwapProxy",
+    "chain": "Monad Testnet",
+    "chainId": 10143,
+    "address": "0x0000000085E102724e78eCd2F45DC9cA239Affad",
+    "tier": "labs-supported",
+    "sourceRepo": "https://github.com/Uniswap/universal-router",
+    "sourceRef": "2899307",
+    "sourceCodeUrl": "https://github.com/Uniswap/universal-router/blob/main/contracts/SwapProxy.sol",
+    "explorerUrl": "https://testnet.monadvision.com/address/0x0000000085E102724e78eCd2F45DC9cA239Affad",
+    "env": "testnet",
+    "status": "active",
+    "aliases": [
+      "monad testnet"
+    ]
+  }
+]

@@ -1,0 +1,344 @@
+{
+  "observed_at": "2026-10-04T13:55:10.860530+00:00",
+  "url": "https://monad-ai-concierge.vercel.app",
+  "live_wallet_signature_tested": false,
+  "results": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "response": {
+        "status": "ok",
+        "rpc_connected": true,
+        "gemini_configured": true,
+        "gemini_model": "gemini-3.1-flash-lite",
+        "ai_provider": "gemini",
+        "chain_id": 10143,
+        "block_number": 68132541
+      }
+    },
+    {
+      "path": "/api/config",
+      "status": 200,
+      "response": {
+        "chain_id": 10143,
+        "network": "Monad Testnet",
+        "explorer_url": "https://testnet.monadscan.com",
+        "swap_mode": "mock",
+        "max_swap_mon": "10",
+        "token_registry": {
+          "MON": {
+            "decimals": 18
+          },
+          "USDC": {
+            "decimals": 6
+          }
+        },
+        "activity_registry_address": null,
+        "ai_provider": "gemini",
+        "ai_configured": true,
+        "version": "1.1.0",
+        "wallet_configured": true,
+        "sponsorship": false
+      }
+    },
+    {
+      "path": "/api/gas",
+      "status": 200,
+      "response": {
+        "chain_id": 10143,
+        "block_number": 68132545,
+        "gas_price_wei": "102000000000",
+        "gas_price_gwei": "102",
+        "observed_at": 1791122107
+      }
+    },
+    {
+      "path": "/api/chat",
+      "status": 200,
+      "response": {
+        "type": "information",
+        "action": "check_balance",
+        "message": "Your balance is 10 MON.",
+        "intent_source": "command",
+        "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+        "chain_data": {
+          "chain_id": 10143,
+          "block_number": 68132548,
+          "balance_wei": "10000000000000000000",
+          "balance_mon": "10",
+          "gas_price_wei": "102000000000",
+          "gas_price_gwei": "102",
+          "base_fee_per_gas_wei": "100000000000"
+        },
+        "requires_confirmation": false
+      }
+    },
+    {
+      "path": "/api/chat",
+      "status": 200,
+      "response": {
+        "type": "information",
+        "action": "gas_check",
+        "message": "Current gas price is 102 gwei per gas unit. This is not a transaction fee estimate.",
+        "intent_source": "command",
+        "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+        "chain_data": {
+          "chain_id": 10143,
+          "block_number": 68132549,
+          "balance_wei": "10000000000000000000",
+          "balance_mon": "10",
+          "gas_price_wei": "102000000000",
+          "gas_price_gwei": "102",
+          "base_fee_per_gas_wei": "100000000000"
+        },
+        "requires_confirmation": false
+      }
+    },
+    {
+      "path": "/api/chat",
+      "status": 200,
+      "response": {
+        "type": "action_plan",
+        "plan": {
+          "intent": {
+            "action": "swap",
+            "params": {
+              "token_in": "MON",
+              "token_out": "USDC",
+              "amount": "1",
+              "max_gas_price_gwei": "1",
+              "min_balance_mon": null
+            }
+          },
+          "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+          "chain_id": 10143,
+          "requires_confirmation": true,
+          "executable": false,
+          "status": "intent_only",
+          "reason": "Intent only. Request a fresh preview, review its safeguards and explicitly confirm with your passkey."
+        },
+        "chain_data": {
+          "chain_id": 10143,
+          "block_number": 68132551,
+          "balance_wei": "10000000000000000000",
+          "balance_mon": "10",
+          "gas_price_wei": "102000000000",
+          "gas_price_gwei": "102",
+          "base_fee_per_gas_wei": "100000000000"
+        },
+        "intent_source": "command",
+        "steps": null,
+        "needs_step_confirmation": false,
+        "message": "Review a fresh swap preview before approving anything."
+      }
+    },
+    {
+      "path": "/api/chat",
+      "status": 200,
+      "response": {
+        "type": "action_plan",
+        "plan": {
+          "intent": {
+            "action": "swap",
+            "params": {
+              "token_in": "MON",
+              "token_out": "USDC",
+              "amount": "1",
+              "max_gas_price_gwei": null,
+              "min_balance_mon": null
+            }
+          },
+          "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+          "chain_id": 10143,
+          "requires_confirmation": true,
+          "executable": false,
+          "status": "intent_only",
+          "reason": "Intent only. Request a fresh preview, review its safeguards and explicitly confirm with your passkey."
+        },
+        "chain_data": {
+          "chain_id": 10143,
+          "block_number": 68132552,
+          "balance_wei": "10000000000000000000",
+          "balance_mon": "10",
+          "gas_price_wei": "102000000000",
+          "gas_price_gwei": "102",
+          "base_fee_per_gas_wei": "100000000000"
+        },
+        "intent_source": "command",
+        "steps": null,
+        "needs_step_confirmation": false,
+        "message": "Review a fresh swap preview before approving anything."
+      }
+    },
+    {
+      "path": "/api/prepare",
+      "status": 409,
+      "response": {
+        "error": {
+          "code": "gas_limit_exceeded",
+          "message": "Current gas is at or above your limit. Nothing was signed or sent."
+        }
+      }
+    },
+    {
+      "path": "/api/prepare",
+      "status": 200,
+      "response": {
+        "preview": {
+          "preview_id": "ea4de68bd07b0888f9ea1699129d402d",
+          "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+          "chain_id": 10143,
+          "mode": "mock",
+          "action": "swap",
+          "token": "MON",
+          "amount": null,
+          "recipient": null,
+          "recipient_name": null,
+          "min_balance_mon": null,
+          "activity_id": null,
+          "amount_mon": "1",
+          "estimated_usdc": "0.1",
+          "minimum_usdc": "0.0995",
+          "slippage_bps": 50,
+          "gas_price_gwei": "102",
+          "estimated_call_gas_mon": null,
+          "max_gas_price_gwei": null,
+          "expires_at": 1791122290,
+          "simulation": "mock_only",
+          "transaction": null,
+          "warnings": [
+            "Rehearsal only: fixed fictional rate 1 MON = 0.10 USDC.",
+            "Passkey signs a demo approval; no funds move and no blockchain transaction is submitted.",
+            "Gas and balance are real Monad RPC readings. No DEX simulation or real quote is claimed."
+          ],
+          "requires_confirmation": true
+        }
+      }
+    },
+    {
+      "path": "/api/revalidate",
+      "status": 200,
+      "response": {
+        "preview": {
+          "preview_id": "ea4de68bd07b0888f9ea1699129d402d",
+          "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+          "chain_id": 10143,
+          "mode": "mock",
+          "action": "swap",
+          "token": "MON",
+          "amount": null,
+          "recipient": null,
+          "recipient_name": null,
+          "min_balance_mon": null,
+          "activity_id": null,
+          "amount_mon": "1",
+          "estimated_usdc": "0.1",
+          "minimum_usdc": "0.0995",
+          "slippage_bps": 50,
+          "gas_price_gwei": "102",
+          "estimated_call_gas_mon": null,
+          "max_gas_price_gwei": null,
+          "expires_at": 1791122290,
+          "simulation": "mock_only",
+          "transaction": null,
+          "warnings": [
+            "Rehearsal only: fixed fictional rate 1 MON = 0.10 USDC.",
+            "Passkey signs a demo approval; no funds move and no blockchain transaction is submitted.",
+            "Gas and balance are real Monad RPC readings. No DEX simulation or real quote is claimed."
+          ],
+          "requires_confirmation": true
+        },
+        "approval_message": "Monad AI Concierge\nDEMO APPROVAL ONLY \u2014 NO FUNDS MOVE\n{\"action\":\"swap\",\"activity_id\":null,\"amount\":null,\"amount_mon\":\"1\",\"chain_id\":10143,\"estimated_call_gas_mon\":null,\"estimated_usdc\":\"0.1\",\"expires_at\":1791122290,\"gas_price_gwei\":\"102\",\"max_gas_price_gwei\":null,\"min_balance_mon\":null,\"minimum_usdc\":\"0.0995\",\"mode\":\"mock\",\"preview_id\":\"ea4de68bd07b0888f9ea1699129d402d\",\"recipient\":null,\"recipient_name\":null,\"requires_confirmation\":true,\"simulation\":\"mock_only\",\"slippage_bps\":50,\"token\":\"MON\",\"transaction\":null,\"wallet_address\":\"0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e\",\"warnings\":[\"Rehearsal only: fixed fictional rate 1 MON = 0.10 USDC.\",\"Passkey signs a demo approval; no funds move and no blockchain transaction is submitted.\",\"Gas and balance are real Monad RPC readings. No DEX simulation or real quote is claimed.\"]}"
+      }
+    },
+    {
+      "path": "/api/prepare",
+      "status": 200,
+      "response": {
+        "preview": {
+          "preview_id": "a92e9b15bfc530c9d7aac10e2218ae94",
+          "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+          "chain_id": 10143,
+          "mode": "transfer",
+          "action": "transfer",
+          "token": "MON",
+          "amount": "0.001",
+          "recipient": "0x2222222222222222222222222222222222222222",
+          "recipient_name": "Father",
+          "min_balance_mon": null,
+          "activity_id": null,
+          "amount_mon": "0.001",
+          "estimated_usdc": "0",
+          "minimum_usdc": "0",
+          "slippage_bps": 0,
+          "gas_price_gwei": "102",
+          "estimated_call_gas_mon": "0.002142",
+          "max_gas_price_gwei": null,
+          "expires_at": 1791122291,
+          "simulation": "rpc_call_passed",
+          "transaction": {
+            "to": "0x2222222222222222222222222222222222222222",
+            "value": "1000000000000000",
+            "data": "0x"
+          },
+          "warnings": [
+            "REAL TESTNET TRANSFER: tokens will leave this smart account.",
+            "Check the full recipient address. A saved contact is a local address-book entry, not verified identity.",
+            "The wallet estimates account deployment and the full transaction fee before approval."
+          ],
+          "requires_confirmation": true
+        }
+      }
+    },
+    {
+      "path": "/api/revalidate",
+      "status": 200,
+      "response": {
+        "preview": {
+          "preview_id": "a92e9b15bfc530c9d7aac10e2218ae94",
+          "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+          "chain_id": 10143,
+          "mode": "transfer",
+          "action": "transfer",
+          "token": "MON",
+          "amount": "0.001",
+          "recipient": "0x2222222222222222222222222222222222222222",
+          "recipient_name": "Father",
+          "min_balance_mon": null,
+          "activity_id": null,
+          "amount_mon": "0.001",
+          "estimated_usdc": "0",
+          "minimum_usdc": "0",
+          "slippage_bps": 0,
+          "gas_price_gwei": "102",
+          "estimated_call_gas_mon": "0.002142",
+          "max_gas_price_gwei": null,
+          "expires_at": 1791122291,
+          "simulation": "rpc_call_passed",
+          "transaction": {
+            "data": "0x",
+            "to": "0x2222222222222222222222222222222222222222",
+            "value": "1000000000000000"
+          },
+          "warnings": [
+            "REAL TESTNET TRANSFER: tokens will leave this smart account.",
+            "Check the full recipient address. A saved contact is a local address-book entry, not verified identity.",
+            "The wallet estimates account deployment and the full transaction fee before approval."
+          ],
+          "requires_confirmation": true
+        },
+        "approval_message": "REAL TESTNET TRANSFER \u2014 requires transaction approval"
+      }
+    },
+    {
+      "path": "/api/rpc",
+      "status": 400,
+      "response": {
+        "error": {
+          "code": "rpc_method_rejected",
+          "message": "RPC method is not allowed."
+        }
+      }
+    }
+  ]
+}

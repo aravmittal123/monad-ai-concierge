@@ -1,0 +1,25 @@
+export type SwapIntent = {action:'swap'; params:{token_in:'MON'; token_out:'USDC'; amount:string; max_gas_price_gwei:string|null; min_balance_mon?:string|null}};
+export type TransferIntent = {action:'transfer';params:{token:'MON'|'USDC';amount:string;recipient:string;max_gas_price_gwei:string|null}};
+export type Intent = SwapIntent|TransferIntent;
+export type Contact = {name:string;address:string};
+export type Step = {title:string;status:'complete'|'ready'|'blocked'};
+export type Activity = {id:string;account:string;title:string;status:'confirmed'|'demo-approved'|'pending'|'failed'|'cancelled';time:number;hash?:`0x${string}`;userOpHash?:`0x${string}`;recipient?:string};
+export type GasData = {chain_id:number;block_number:number;gas_price_gwei:string;gas_price_wei:string;observed_at:number};
+export type ChainData = {chain_id:number; block_number:number; balance_mon:string; balance_wei:string; gas_price_gwei:string; gas_price_wei:string};
+export type Preview = {
+  preview_id:string; wallet_address:string; chain_id:number; mode:'mock'|'uniswap_v3'|'transfer';
+  action?:'swap'|'transfer';token?:'MON'|'USDC';amount?:string|null;recipient?:string|null;recipient_name?:string|null;min_balance_mon?:string|null;
+  amount_mon:string; estimated_usdc:string; minimum_usdc:string; slippage_bps:number;
+  gas_price_gwei:string; estimated_call_gas_mon:string|null; max_gas_price_gwei:string|null;
+  expires_at:number; simulation:'mock_only'|'rpc_call_passed';
+  transaction:{to:`0x${string}`; value:string; data:`0x${string}`}|null;
+  warnings:string[]; requires_confirmation:true;
+};
+export type Prepared = {preview:Preview; preview_token:string};
+export type ChatResponse = {type:'information'|'unsupported_action'|'action_plan'; message:string;
+  intent_source?:'command'|'gemini'|'nvidia';
+  steps?:Step[];needs_step_confirmation?:boolean;
+  action?:string; chain_data?:ChainData; plan?:{intent:Intent; wallet_address:string; chain_id:number}};
+export type RuntimeConfig = {chain_id:number; network:string; explorer_url:string; swap_mode:'mock'|'uniswap_v3'; max_swap_mon:string;
+  wallet_configured:boolean; sponsorship:boolean; activity_registry_address?:string|null};
+export type TransactionResult = {kind:'rehearsal'; approvalId:string}|{kind:'transaction'; hash:`0x${string}`; userOpHash:`0x${string}`};

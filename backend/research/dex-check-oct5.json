@@ -1,0 +1,22 @@
+[
+  {
+    "contract": "UniswapV3Factory",
+    "address": "0x961235a9020B05C44DF1026D956D1F4D78014276",
+    "code_bytes": 0
+  },
+  {
+    "contract": "QuoterV2",
+    "address": "0x1b4E313fEF15630AF3e6F2dE550Dbf4cC9D3081d",
+    "code_bytes": 0
+  },
+  {
+    "contract": "SwapRouter02",
+    "address": "0x4c4eABd5Fb1D1A7234A48692551eAECFF8194CA7",
+    "code_bytes": 0
+  },
+  {
+    "contract": "UniversalRouter",
+    "address": "0x3aE6D8A282D67893e17AA70ebFFb33EE5aa65893",
+    "code_bytes": 0
+  }
+]

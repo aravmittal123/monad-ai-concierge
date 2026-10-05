@@ -1,0 +1,15 @@
+.env
+.env.*
+.venv/**
+venv/**
+tests/**
+scripts/**
+research/**
+**/__pycache__/**
+.pytest_cache/**
+*.log
+live-results.json
+TEST_RESULTS.md
+production-results.json
+bot.py
+deploy_activity.py

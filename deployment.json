@@ -1,0 +1,18 @@
+{
+  "application": "https://monad-ai-concierge.vercel.app",
+  "backend": "https://monad-ai-concierge-api.vercel.app",
+  "hosting": "Vercel",
+  "network": "Monad Testnet",
+  "chain_id": 10143,
+  "swap_mode": "mock",
+  "passkey_live_acceptance": "local_registration_and_recovery_passed_with_virtual_authenticator_physical_device_approval_pending",
+  "production_passkey_status": "requires_production_RPC_origin_allowlist_and_passkey_RP_domain_configuration",
+  "ai_provider": "gemini",
+  "frontend_deployment_id": "dpl_CJ5fqpQFCpm4NZyYJCv372hH7nhk",
+  "backend_deployment_id": "dpl_BL7XVMwKk8iux7uKJfRaVq3drShM",
+  "advanced_release": "2026-10-03",
+  "transfer_acceptance": "production_RPC_simulation_and_revalidation_passed_no_signed_transfer_sent",
+  "optional_integrations": "sponsorship_telegram_and_activity_contract_require_owner_configuration",
+  "repair_release": "2026-10-04",
+  "local_bundler_acceptance": "P256_account_fee_simulation_passed_with_balance_override_no_signing_or_submission"
+}

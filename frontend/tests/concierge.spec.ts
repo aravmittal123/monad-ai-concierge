@@ -1,0 +1,75 @@
+import {test,expect,type Page} from '@playwright/test';
+const address='0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e';
+const snapshot={chain_id:10143,block_number:1234,balance_mon:'10',balance_wei:'10000000000000000000',gas_price_gwei:'102',gas_price_wei:'102000000000'};
+const config={chain_id:10143,network:'Monad Testnet',swap_mode:'mock',max_swap_mon:'10',wallet_configured:false,sponsorship:false};
+async function fixtures(page:Page){await page.route('**/api/config',r=>r.fulfill({json:config}));await page.route('**/api/health',r=>r.fulfill({json:{rpc_connected:true}}));await page.route('**/api/gas',r=>r.fulfill({json:{...snapshot,observed_at:Math.floor(Date.now()/1000)}}));await page.route('**/api/account',r=>r.fulfill({json:snapshot}));}
+async function observe(page:Page){await page.getByRole('button',{name:'Connect Wallet',exact:true}).first().click();await page.getByRole('button',{name:'Try Demo Account'}).click();await expect(page.getByRole('dialog')).toHaveCount(0);}
+async function sidebar(page:Page){if(await page.getByRole('button',{name:'Toggle sidebar'}).isVisible())await page.getByRole('button',{name:'Toggle sidebar'}).click();}
+function preview(){return {preview_token:'test-only',preview:{preview_id:'test',wallet_address:address,chain_id:10143,mode:'mock',amount_mon:'1',estimated_usdc:'0.1',minimum_usdc:'0.0995',slippage_bps:50,gas_price_gwei:'102',estimated_call_gas_mon:null,max_gas_price_gwei:null,expires_at:Math.floor(Date.now()/1000)+180,simulation:'mock_only',transaction:null,requires_confirmation:true,warnings:['Demo swap. No funds move.']}};}
+
+test('two-column landing, chips and wallet modal are responsive',async({page},info)=>{await fixtures(page);await page.goto('/');await expect(page.getByRole('heading',{name:"What's your next move?"})).toBeVisible();await expect(page.getByLabel('Ask Monad')).toBeEnabled();await page.getByRole('button',{name:'Send MON',exact:true}).click();await expect(page.getByLabel('Ask Monad')).toHaveValue('Send 0.01 MON to Father');await expect(page.getByRole('dialog')).toHaveCount(0);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:`screenshots/${info.project.name}-landing.png`,fullPage:true});await page.getByRole('button',{name:'Connect Wallet',exact:true}).first().click();await expect(page.getByRole('button',{name:'Create Account'})).toBeDisabled();await expect(page.getByRole('dialog')).toBeVisible();await page.keyboard.press('Escape');await expect(page.getByRole('dialog')).toHaveCount(0);});
+
+test('real reads have provenance; malicious response remains text',async({page})=>{await fixtures(page);await page.route('**/api/chat',r=>r.fulfill({json:{type:'information',message:'10 MON <script>alert(1)</script>',chain_data:snapshot,intent_source:'command'}}));await page.goto('/');await observe(page);await page.getByLabel('Ask Monad').fill('Check my balance');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByText('Direct command · no AI call')).toBeVisible();await expect(page.getByText('RPC verified · #1234')).toBeVisible();await expect(page.locator('.message-content script')).toHaveCount(0);});
+
+test('read-only demo preview cannot sign and cancellation enters activity',async({page},info)=>{await fixtures(page);await page.route('**/api/chat',r=>r.fulfill({json:{type:'action_plan',message:'Review demo swap.',plan:{intent:{action:'swap',params:{token_in:'MON',token_out:'USDC',amount:'1',max_gas_price_gwei:null}}}}}));await page.route('**/api/prepare',r=>r.fulfill({json:preview()}));await page.goto('/');await observe(page);await page.getByLabel('Ask Monad').fill('Swap 1 MON to USDC');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByRole('dialog')).toBeVisible();await expect(page.getByRole('button',{name:'Confirm with Passkey'})).toBeDisabled();await expect(page.getByText('Demo Mode · no real funds move')).toBeVisible();await page.screenshot({path:`screenshots/${info.project.name}-preview.png`,fullPage:true});await page.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);await sidebar(page);await expect(page.locator('.activity-cancelled')).toHaveCount(1);});
+
+test('contacts persist and real transfer preview displays complete recipient',async({page})=>{await fixtures(page);await page.goto('/');await observe(page);await sidebar(page);await page.getByRole('button',{name:/Saved contacts/}).click();await page.getByLabel('Contact name').fill('Father');await page.getByLabel('Recipient address').fill('0x'+'2'.repeat(40));await page.getByRole('button',{name:'Save contact'}).click();await expect(page.getByRole('button',{name:'Delete Father'})).toBeVisible();await page.getByRole('button',{name:'Close contacts'}).click();if(await page.getByRole('button',{name:'Toggle sidebar'}).isVisible())await page.getByRole('button',{name:'Toggle sidebar'}).click();
+ const recipient='0x'+'2'.repeat(40);await page.route('**/api/chat',r=>{expect(r.request().postDataJSON().contacts).toEqual([{name:'Father',address:recipient}]);return r.fulfill({json:{type:'action_plan',message:'Review transfer.',plan:{intent:{action:'transfer',params:{token:'MON',amount:'1',recipient:'Father',max_gas_price_gwei:null}}}}});});
+ await page.route('**/api/prepare',r=>r.fulfill({json:{...preview(),preview:{...preview().preview,mode:'transfer',action:'transfer',token:'MON',amount:'1',recipient,recipient_name:'Father',transaction:{to:recipient,value:'1000000000000000000',data:'0x'},simulation:'rpc_call_passed'}}}));await page.getByLabel('Ask Monad').fill('Send 1 MON to Father');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByRole('heading',{name:'Review your transfer'})).toBeVisible();await expect(page.getByText(recipient,{exact:true})).toBeVisible();await expect(page.getByText(/REAL TESTNET TRANSFER/)).toBeVisible();await page.getByRole('checkbox',{name:'I checked this full address with the recipient.'}).check();await expect(page.getByRole('button',{name:'Confirm with Passkey'})).toBeDisabled();await page.reload();await observe(page);await sidebar(page);await page.getByRole('button',{name:/Saved contacts/}).click();await expect(page.getByRole('button',{name:'Delete Father'})).toBeVisible();});
+
+test('workflow waits for user continuation before preparation',async({page})=>{await fixtures(page);const intent={action:'swap',params:{token_in:'MON',token_out:'USDC',amount:'2',max_gas_price_gwei:null,min_balance_mon:'5'}};await page.route('**/api/chat',r=>r.fulfill({json:{type:'action_plan',message:'Balance condition passed.',plan:{intent},needs_step_confirmation:true,steps:[{title:'Check balance',status:'complete'},{title:'Review swap preview',status:'ready'}]}}));let preparations=0;await page.route('**/api/prepare',r=>{preparations++;expect(r.request().postDataJSON().intent.params.min_balance_mon).toBe('5');return r.fulfill({json:preview()});});await page.goto('/');await observe(page);await page.getByLabel('Ask Monad').fill('Check my balance, and if I have more than 5 MON, swap 2 to USDC');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByRole('button',{name:'Continue to preview'})).toBeVisible();expect(preparations).toBe(0);await page.getByRole('button',{name:'Continue to preview'}).click();await expect(page.getByRole('dialog')).toBeVisible();expect(preparations).toBe(1);});
+
+test('RPC outage does not disable wallet setup and gas retries independently',async({page})=>{await fixtures(page);await page.route('**/api/config',r=>r.fulfill({json:{...config,wallet_configured:true}}));let recovered=false;await page.route('**/api/gas',r=>r.fulfill(recovered?{json:{...snapshot,observed_at:Math.floor(Date.now()/1000)}}:{status:503,json:{error:{code:'rpc_unavailable',message:'Connection lost'}}}));await page.goto('/');await page.getByRole('button',{name:'Connect Wallet',exact:true}).first().click();await expect(page.getByRole('button',{name:'Create Account'})).toBeEnabled();await page.keyboard.press('Escape');await sidebar(page);await expect(page.getByText(/Connection lost · retrying/)).toBeVisible();recovered=true;await page.getByRole('button',{name:'Refresh network'}).click();await expect(page.locator('.gas-high strong')).toHaveText('102');});
+
+test('keyboard, light theme, storage and clean hydration',async({page},info)=>{const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/hydrat|did not match/i.test(m.text()))errors.push(m.text());});await fixtures(page);await page.goto('/');await page.keyboard.press('Control+k');await expect(page.getByLabel('Ask Monad')).toBeFocused();await page.getByRole('button',{name:'Switch to light mode'}).click();await expect(page.locator('html')).toHaveAttribute('data-theme','light');await page.screenshot({path:`screenshots/${info.project.name}-light.png`,fullPage:true});await page.reload();await expect(page.locator('html')).toHaveAttribute('data-theme','light');expect(errors).toEqual([]);});
+
+test('voice fills the composer but never submits or signs',async({page})=>{await page.addInitScript(()=>{class FakeSpeech{lang='';continuous=false;interimResults=false;onresult:any;onend:any;onerror:any;start(){this.onresult?.({results:[[{transcript:'Send 1 MON to Father'}]]});this.onend?.();}abort(){this.onend?.();}}Object.assign(window,{SpeechRecognition:FakeSpeech});});await fixtures(page);let chats=0;await page.route('**/api/chat',()=>{chats++;});await page.goto('/');await page.getByRole('button',{name:'Voice input'}).click();await expect(page.getByLabel('Ask Monad')).toHaveValue('Send 1 MON to Father');expect(chats).toBe(0);});
+
+test('gas rule failure is a toast, never an approval prompt',async({page})=>{await fixtures(page);await page.route('**/api/chat',r=>r.fulfill({json:{type:'action_plan',message:'Checking rule.',plan:{intent:{action:'swap',params:{token_in:'MON',token_out:'USDC',amount:'1',max_gas_price_gwei:'1'}}}}}));await page.route('**/api/prepare',r=>r.fulfill({status:409,json:{error:{code:'gas_limit_exceeded',message:'Gas exceeds your limit. Nothing was sent.'}}}));await page.goto('/');await observe(page);await page.getByLabel('Ask Monad').fill('Swap 1 MON to USDC only if gas is below 1 gwei');await page.getByRole('button',{name:'Send message'}).click();await expect(page.getByRole('alert').filter({hasText:'Gas exceeds your limit.'})).toBeVisible();await expect(page.getByRole('dialog')).toHaveCount(0);});
+
+test('gateway blocks arbitrary submission and cross-origin calls',async({request})=>{expect((await request.post('/api/rpc',{data:{jsonrpc:'2.0',id:1,method:'eth_sendRawTransaction',params:['0x']}})).status()).toBe(400);expect((await request.post('/api/execute',{data:{}})).status()).toBe(404);expect((await request.post('/api/chat',{data:{prompt:'test',wallet_address:address},headers:{Origin:'https://untrusted.example'}})).status()).toBe(403);});
+
+test('voice unsupported browser explains recovery instead of a dead button',async({page})=>{
+ await page.addInitScript(()=>{Object.defineProperty(window,'SpeechRecognition',{value:undefined,configurable:true});Object.defineProperty(window,'webkitSpeechRecognition',{value:undefined,configurable:true});});
+ await fixtures(page);await page.goto('/');await page.getByRole('button',{name:'Voice input'}).click();
+ await expect(page.locator('.voice-feedback')).toContainText('no speech recognition');
+ await expect(page.getByLabel('Ask Monad')).toBeEnabled();
+});
+
+test('voice permission denial gives settings instructions and can retry',async({page})=>{
+ await page.addInitScript(()=>{class DeniedSpeech{onerror:any;onend:any;start(){this.onerror?.({error:'not-allowed'});this.onend?.();}abort(){this.onend?.();}}Object.assign(window,{SpeechRecognition:DeniedSpeech});});
+ await fixtures(page);await page.goto('/');await page.getByRole('button',{name:'Voice input'}).click();
+ await expect(page.locator('.voice-feedback')).toContainText('Microphone access is blocked');
+ await expect(page.getByRole('button',{name:'Voice input'})).toHaveAttribute('aria-pressed','false');
+});
+
+test('prompt library exposes questions and only prefills, without submitting',async({page})=>{
+ await fixtures(page);let chats=0;await page.route('**/api/chat',()=>{chats++;});await page.goto('/');
+ await page.getByRole('button',{name:'What can I ask?'}).click();await expect(page.getByRole('heading',{name:'Explore the Concierge'})).toBeVisible();
+ expect(await page.locator('.example-prompt').count()).toBeGreaterThan(20);
+ await page.getByRole('button',{name:'Explain wallet fees',exact:true}).click();await expect(page.getByLabel('Ask Monad')).toHaveValue('Explain wallet fees');expect(chats).toBe(0);
+});
+
+test('voice success stays quiet and leaves only the transcript',async({page})=>{
+ await page.addInitScript(()=>{class Speech{onresult:any;onend:any;start(){this.onresult?.({results:[[{transcript:'Check my balance'}]]});this.onend?.();}abort(){this.onend?.();}}Object.assign(window,{SpeechRecognition:Speech});});
+ await fixtures(page);await page.goto('/');
+ for(let i=0;i<3;i++){await page.getByRole('button',{name:'Voice input'}).click();await expect(page.getByLabel('Ask Monad')).toHaveValue('Check my balance');}
+ await expect(page.locator('.toast')).toHaveCount(0);await expect(page.locator('.voice-feedback')).toHaveCount(0);await expect(page.locator('.voice-listening')).toHaveCount(0);
+});
+
+test('assistant replies reveal progressively without changing the final answer',async({page})=>{
+ await fixtures(page);const answer='Your wallet fee includes account deployment, signature verification and execution. '.repeat(8);
+ await page.route('**/api/chat',r=>r.fulfill({json:{type:'information',message:answer,intent_source:'command'}}));await page.goto('/');await observe(page);
+ await page.getByLabel('Ask Monad').fill('Explain wallet fees');await page.getByRole('button',{name:'Send message'}).click();
+ const reply=page.locator('.message-assistant .message-body > span');await expect(reply).toHaveAttribute('data-revealing','true');
+ const visible=reply.locator('[aria-hidden=true]');expect((await visible.textContent())!.length).toBeLessThan(answer.length);
+ await expect(reply).toHaveAttribute('data-revealing','false',{timeout:7000});await expect(visible).toHaveText(answer.trim());
+});
+
+test('reduced motion shows full answers without a typing animation',async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});await fixtures(page);
+ await page.route('**/api/chat',r=>r.fulfill({json:{type:'information',message:'Your balance is 10 MON.',intent_source:'command'}}));await page.goto('/');await observe(page);
+ await page.getByLabel('Ask Monad').fill('Check my balance');await page.getByRole('button',{name:'Send message'}).click();
+ await expect(page.locator('.message-assistant .message-body > span')).toHaveAttribute('data-revealing','false');
+ await expect(page.locator('.message-assistant .message-body [aria-hidden=true]')).toHaveText('Your balance is 10 MON.');
+});

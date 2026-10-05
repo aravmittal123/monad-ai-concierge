@@ -1,0 +1,110 @@
+[
+  {
+    "case": "health",
+    "status": 200,
+    "response": {
+      "status": "ok",
+      "rpc_connected": true,
+      "gemini_configured": true,
+      "gemini_model": "gemini-3.1-flash-lite",
+      "chain_id": 10143,
+      "block_number": 66917365
+    }
+  },
+  {
+    "case": "Check my balance",
+    "status": 200,
+    "response": {
+      "type": "information",
+      "action": "check_balance",
+      "message": "Your balance is 10 MON.",
+      "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+      "chain_data": {
+        "chain_id": 10143,
+        "block_number": 66917374,
+        "balance_wei": "10000000000000000000",
+        "balance_mon": "10",
+        "gas_price_wei": "102000000000",
+        "gas_price_gwei": "102",
+        "base_fee_per_gas_wei": "100000000000"
+      },
+      "requires_confirmation": false
+    }
+  },
+  {
+    "case": "What's the gas price?",
+    "status": 200,
+    "response": {
+      "type": "information",
+      "action": "gas_check",
+      "message": "Current gas price is 102 gwei per gas unit. This is not a transaction fee estimate.",
+      "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+      "chain_data": {
+        "chain_id": 10143,
+        "block_number": 66917389,
+        "balance_wei": "10000000000000000000",
+        "balance_mon": "10",
+        "gas_price_wei": "102000000000",
+        "gas_price_gwei": "102",
+        "base_fee_per_gas_wei": "100000000000"
+      },
+      "requires_confirmation": false
+    }
+  },
+  {
+    "case": "Swap 2 MON to USDC",
+    "status": 200,
+    "response": {
+      "type": "action_plan",
+      "plan": {
+        "intent": {
+          "action": "swap",
+          "params": {
+            "token_in": "MON",
+            "token_out": "USDC",
+            "amount": "2",
+            "max_gas_price_gwei": null
+          }
+        },
+        "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+        "chain_id": 10143,
+        "requires_confirmation": true,
+        "executable": false,
+        "status": "intent_only",
+        "reason": "Swap preparation, token verification, simulation and passkey approval are not implemented in Milestone 1."
+      },
+      "chain_data": {
+        "chain_id": 10143,
+        "block_number": 66917400,
+        "balance_wei": "10000000000000000000",
+        "balance_mon": "10",
+        "gas_price_wei": "102000000000",
+        "gas_price_gwei": "102",
+        "base_fee_per_gas_wei": "100000000000"
+      },
+      "message": "Swap intent validated only. No quote, simulation, signature or transaction has occurred."
+    }
+  },
+  {
+    "case": "Send all my funds to random address",
+    "status": 200,
+    "response": {
+      "type": "unsupported_action",
+      "message": "Supported: MON balance, gas price, and a MON to USDC swap intent.",
+      "requires_confirmation": false
+    }
+  },
+  {
+    "case": "invalid wallet",
+    "status": 422,
+    "response": {
+      "error": {
+        "code": "invalid_request",
+        "message": "Provide a nonblank prompt (max 2000 characters) and valid EVM wallet address; no extra fields.",
+        "fields": [
+          "body.wallet_address"
+        ]
+      }
+    }
+  }
+]
