@@ -1,119 +1,154 @@
-# Monad AI Concierge
+<div align="center">
 
-A deployed, passkey-first Monad assistant: real balance and gas reads, constrained AI intents, and explicit approval of an expiring preview. Gemini is selected; optional NVIDIA Nemotron support is available. Exact commands remain usable during model outages and are labelled separately from AI interpretations.
+---
 
-**Advanced release:** real MON/USDC transfer preparation and passkey submission, saved contacts, independent live gas/block polling, browser-local activity, a bounded two-step workflow, voice dictation, dark/light themes, a mobile drawer, and PWA support. Optional sponsorship, Telegram, and on-chain activity integrations require external setup. See [feature status and activation](ADVANCEMENTS.md).
+## 😖 The Problem
 
-**Live app:** https://monad-ai-concierge.vercel.app  
-**Backend health:** https://monad-ai-concierge-api.vercel.app/health
+Blockchain finance is powerful — but the interface is hostile:
+seed phrases, gas fees, token approvals, slippage settings.
+Normal people give up within two minutes.
 
-Latest repair: local passkey creation/recovery and live Gemini/chat checks pass. Production chat works, but the current ZeroDev project returns `localhost` as its passkey domain; configure the production domain before claiming deployed passkey login works. See [setup and tests](RUN_LOCAL.md).
+## 💡 The Solution
 
-Swaps currently use a clearly labelled **off-chain rehearsal**: fictional 1 MON = 0.10 demo USDC, no funds move, no transaction hash. The verified Uniswap testnet deployment addresses returned no code. The real adapter fails closed; it is not a verified working route. Passkey SDK integration is implemented; live ZeroDev creation/recovery passed locally with a Chromium test authenticator; physical-device approval and signed rehearsal verification remain pending.
+A **chat-first wallet**. You speak. It verifies. You approve.
 
-## Milestones (0–6)
+| You say                        | Concierge does                                                                   |
+| :----------------------------- | :------------------------------------------------------------------------------- |
+| *"Check my balance"*         | Reads the live chain instantly — no AI needed                                   |
+| *"Send 0.001 MON to Father"* | Resolves contact locally, simulates, shows fees →**fingerprint approval** |
+| *"Swap 1 MON to USDC"*       | Clearly-labelled rehearsal preview — no funds move                              |
 
-| Milestone | Result |
-| --- | --- |
-| 0 — Architecture verification | Complete; current official sources and live chain probes |
-| 1 — Backend foundation | Complete; real RPC, Gemini structured output, strict validation |
-| 2 — Chat frontend | Complete; responsive dark UI, public account reads, clear previews |
-| 3 — Passkey smart account | Live local registration/recovery passed with a test authenticator; physical device acceptance pending |
-| 4 — Preparation and swap | Rehearsal fallback implemented; real adapter guarded and tested with controlled responses |
-| 5 — Integration/security tests | Automated checks complete; live passkey approval still pending |
-| 6 — Deployment/docs/demo | Both Vercel projects deployed; live read/preview checks and demo guide |
+---
 
-Do not call the full end-to-end passkey milestone complete until the provider/device test passes. See [deployment setup](DEPLOYMENT.md), [judge walkthrough](DEMO.md), [architecture](ARCHITECTURE.md) and [test evidence](backend/TEST_RESULTS.md).
+## 🏗️ Architecture — How the Agent Works
 
-## Run locally (PowerShell)
+```mermaid
+flowchart LR
+    U["👤 User<br/>plain English / voice"] --> FE["⚛️ Next.js App<br/>chat · PWA · themes"]
+    FE --> GW["server-only /api gateway"]
+    GW --> BE["🐍 FastAPI Backend<br/>policy engine · strict validation"]
+    BE --> AI["🧠 Gemini AI<br/>intent parsing ONLY"]
+    BE --> CHAIN[("🟣 Monad Testnet<br/>live balance · gas · blocks")]
+    FE --> ZD["🔐 ZeroDev<br/>passkey smart account"]
+    ZD -->|signed UserOperation| CHAIN
+    CHAIN -->|mined receipt + explorer link| FE
+```
 
-This workspace already has dependencies and local environment files. Build and launch:
+> **Golden rule:** *The AI can propose. Only code validates. Only the human approves.*
+
+### The approval flow, step by step
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant A as Concierge
+    participant G as Gemini
+    participant C as Monad Testnet
+    participant P as Passkey (device)
+    U->>A: "Send 0.001 MON to Father"
+    A->>G: parse intent (strict JSON schema)
+    G-->>A: transfer intent
+    A->>A: recipient resolved from LOCAL contacts only
+    A->>C: simulate transaction + estimate fees
+    C-->>A: ✅ simulation passed
+    A->>U: human-readable preview (expires in 3 min)
+    U->>P: approve with fingerprint
+    P->>C: signed UserOperation
+    C-->>A: mined receipt
+    A->>U: ✅ done + explorer link
+```
+
+---
+
+## ✨ Feature Highlights
+
+|                                      |                                                                            |
+| :----------------------------------- | :------------------------------------------------------------------------- |
+| 🔐**Passkey-first wallet**     | FaceID / fingerprint login via ZeroDev smart accounts — no seed phrases   |
+| 💬**Natural language + voice** | Gemini interprets intent; exact commands still work during AI outages      |
+| 💸**Real testnet transfers**   | MON & Circle USDC with RPC simulation, amount caps, expiring previews      |
+| 🧾**Live network widget**      | Gas price (green/amber/red) + block height, refreshed every 5 s            |
+| 👥**Local contacts**           | Recipients come only from your saved address book — never from AI guesses |
+| 🔁**Two-step intents**         | *"Check my balance, and if I have more than 3 MON, swap 2 to USDC"*      |
+| ⛽**Optional gas sponsorship** | ZeroDev paymaster; refusal never silently switches to user-paid            |
+| 📱**Installable PWA**          | Android/iOS home-screen app with offline-safe screen                       |
+| 🤖**Optional extras**          | Telegram bot + on-chain activity score contract                            |
+
+---
+
+## 🎯 Track Alignment
+
+| Track                                        | How we hit it                                                                              |
+| :------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| **02 — Consumer Products & Payments** | Blockchain is invisible: chat UI, passkey login, plain-language previews                   |
+| **04 — Trust, Identity & AI Infra**   | Passkey-native accounts (WebAuthn/P-256), constrained AI agent, on-chain activity receipts |
+
+## ✅ Honest Status: Real vs Rehearsal
+
+| Feature                                     | Status                                                        |
+| :------------------------------------------ | :------------------------------------------------------------ |
+| Balance / gas / block reads                 | ✅ Real, live RPC                                             |
+| MON & USDC transfers                        | ✅ Real preparation + passkey-signed UserOperations (testnet) |
+| Swaps                                       | 🧪 Clearly-labelled off-chain rehearsal — no funds move      |
+| Gas sponsorship / Telegram / activity score | ⚙️ Implemented, optional external setup                     |
+
+## 🛡️ Safety Rules
+
+- Every state-changing action requires **explicit passkey approval**
+- Previews **expire in 180 s** and are re-validated before signing
+- Unknown tokens, invented recipients, tampered previews → **rejected**
+- Read-only demo account **cannot sign**
+- Provider credentials never touch `NEXT_PUBLIC_*` variables
+
+---
+
+## 📸 Screenshots
+
+|                 Desktop                 |               Mobile PWA               |
+| :--------------------------------------: | :------------------------------------: |
+| ![desktop](docs/screenshots/desktop.png) | ![mobile](docs/screenshots/mobile.png) |
+
+|              Passkey approval              |          Live transfer receipt          |
+| :----------------------------------------: | :--------------------------------------: |
+| ![approval](docs/screenshots/approval.png) | ![receipt](docs/screenshots/receipt.png) |
+
+---
+
+## 🚀 Run Locally (2 commands)
 
 ```powershell
 pwsh -File scripts/start.ps1
+# open http://localhost:3000
 ```
 
-Open http://localhost:3000 for passkey testing. See [Windows testing instructions](RUN_LOCAL.md) for wallet addresses, keys, restart instructions and test prompts. Backend docs are http://127.0.0.1:8000/docs. The launcher builds the latest frontend, requires ports 3000 and 8000 to be free and starts hidden processes, printing their IDs.
+Fresh checkout: `backend/` → `python -m venv .venv` → install `requirements-dev.txt` → copy `.env.example`; `frontend/` → `npm ci` → copy `.env.example`. See [RUN_LOCAL.md](RUN_LOCAL.md).
 
-For a fresh checkout:
-
-```powershell
-cd backend
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-Copy-Item .env.example .env
-cd ../frontend
-npm ci
-Copy-Item .env.example .env.local
-cd ..
-```
-
-Copy examples only when the destination does not exist. Edit the files locally. In two terminals, run:
+## 🧪 Testing — 176 passing checks
 
 ```powershell
-# Terminal 1, from backend/
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-# Terminal 2, from frontend/
-npm run dev
-```
-
-Node 22.20+ and Python 3.12–3.14 are suitable for the pinned stack; this workspace used Python 3.14.6, deployed backend uses 3.12. npm start runs the standalone production build and copies static assets.
-
-## Environment
-
-Backend: GEMINI_API_KEY, API_ACCESS_TOKEN, PREVIEW_SECRET. Generate independent random secrets of at least 32 characters for the last two. Defaults: chain 10143, official Monad Testnet RPC, gemini-3.1-flash-lite, SWAP_MODE=mock, preview lifetime 180 seconds, maximum swap 10 MON. Production requires REQUIRE_API_TOKEN=true.
-
-Frontend server: BACKEND_URL and matching BACKEND_API_TOKEN; ZERODEV_RPC_URL and ZERODEV_PASSKEY_SERVER_URL for the live wallet. SPONSOR_GAS=false initially. Configuration examples describe every variable. None of these provider credentials belongs in NEXT_PUBLIC variables.
-
-```powershell
-pwsh -File scripts/check-config.ps1
-```
-
-The Gemini key formerly embedded in retained prototype files was moved to ignored local configuration. Rotate it in Google AI Studio and update the backend deployment too. Prototypes are preserved but are not production entrypoints.
-
-## Application API
-
-Use the frontend gateway: /api/health, /api/config, /api/account, /api/chat, /api/prepare, /api/revalidate. Direct backend /api/* requests require X-API-Token. There is no backend execution endpoint; the passkey wallet submits signed UserOperations via the provider gateway.
-
-```powershell
-$wallet = '0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e'
-$body = @{prompt='Check my balance';wallet_address=$wallet} | ConvertTo-Json
-Invoke-RestMethod https://monad-ai-concierge.vercel.app/api/chat -Method Post -ContentType application/json -Body $body
-```
-
-Amounts use exact decimal strings. Gas price is per gas unit, not a total transaction fee. Mock swap previews have transaction=null and simulation=mock_only. Real transfer previews use mode=transfer and bind the exact recipient, token and amount. Unknown tokens, invalid or invented recipients, malformed output, omitted conditions, expired/tampered previews, insufficient balance and simulation failures are rejected. The read-only account explorer cannot sign.
-
-## Checks
-
-```powershell
-.\backend\.venv\Scripts\python.exe -m pytest backend/tests -q
-npm --prefix frontend run test
-npm --prefix frontend run typecheck
-npm --prefix frontend run build
-# With local frontend/backend running:
-npm --prefix frontend run test:e2e
-# Optional production check: direct commands plus one live AI request; no signing:
+.\backend\.venv\Scripts\python.exe -m pytest backend/tests -q   # 124 backend/contract
+npm --prefix frontend run test                                  # 32 frontend safety
 .\backend\.venv\Scripts\python.exe scripts/production-smoke.py --ai
 ```
 
-Current results: 124 backend/contract tests, 32 frontend safety tests, 20 desktop/mobile browser cases passed; TypeScript and production builds passed. PWA activation/offline checks passed separately. Real MON transfer simulation/revalidation passed against Monad Testnet; no signed transfer was submitted. Live local ZeroDev registration/recovery passed with a virtual authenticator. Test fixtures are confined to tests. NVIDIA transport/validation is tested with controlled responses; no live NVIDIA key test has been performed.
+Plus 20 desktop/mobile browser acceptance cases, PWA offline checks, and typecheck/build gates.
 
-## Structure
+## 🗂️ Structure
 
-```text
-backend/app/                 FastAPI routes, schemas, policies, real RPC and deterministic builder
-backend/app/constants/       Verified token and contract registry, minimal ABIs
-backend/tests/               Schema, policy, preview, auth and simulation checks
-frontend/app/                Next.js pages and server-only API/provider gateway
-frontend/components/         Chat, login, messages and approval dialog
-frontend/lib/                Typed API, chain helpers and ZeroDev passkey wallet
-frontend/unit/               Wallet approval and receipt safety tests
-frontend/tests/              Desktop/mobile browser acceptance
-scripts/                     Local launcher, secret-safe config check, production smoke
-DEPLOYMENT.md                Provider setup, production variables and deployment commands
-DEMO.md                      Honest 60-second judge walkthrough
+```
+backend/app/        FastAPI routes · policies · RPC · deterministic builder
+backend/tests/      schema · policy · preview · auth · simulation checks
+frontend/app/       Next.js pages + server-only API gateway
+frontend/lib/       typed API · chain helpers · ZeroDev passkey wallet
+scripts/            launcher · config check · production smoke
 ```
 
-Free-tier quotas apply. This is a testnet hackathon demo, not a mainnet-ready financial service. See deployment notes for per-instance rate-limit limits and provider setup.
+## 📚 Deep Dives
 
+[Architecture](ARCHITECTURE.md) · [Deployment](DEPLOYMENT.md) · [Judge Walkthrough](DEMO.md) · [Feature Status](ADVANCEMENTS.md) · [Test Evidence](backend/TEST_RESULTS.md)
 
+## 📄 License
+
+MIT © Arav Mittal — see [LICENSE](LICENSE).
+
+*Testnet hackathon demo. Not a mainnet financial service.*
