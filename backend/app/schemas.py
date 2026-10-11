@@ -172,7 +172,7 @@ class TransactionPreview(StrictModel):
     preview_id: str
     wallet_address: str
     chain_id: int
-    mode: Literal['mock', 'uniswap_v3', 'transfer']
+    mode: Literal['mock', 'uniswap_v3', 'puddleswap_v2', 'transfer']
     action: Literal['swap', 'transfer'] = 'swap'
     token: Literal['MON', 'USDC'] = 'MON'
     amount: str | None = None

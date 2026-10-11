@@ -63,9 +63,10 @@ class GeminiService:
         except errors.APIError as exc:
             if exc.code in (401, 403):
                 raise ServiceError('ai_auth_failed', 'Gemini rejected the API key or model access. Update GEMINI_API_KEY in backend/.env and restart the backend.') from None
-            code = 'ai_rate_limited' if exc.code == 429 else 'ai_unavailable'
             logger.warning('gemini request failed status=%s', exc.code)
-            raise ServiceError(code, 'Gemini is unavailable; check the API key, model access and free-tier quota.') from None
+            if exc.code == 429:
+                raise ServiceError('ai_rate_limited', 'Gemini rate limit or quota reached. Wait and retry, or check the project quota in Google AI Studio. Creating another key in the same project may not increase quota. Balance checks, transfers and supported conditional commands still work.', 429) from None
+            raise ServiceError('ai_unavailable', 'Gemini is temporarily unavailable. Retry shortly; direct balance, transfer and conditional commands still work.', 503) from None
         except Exception as exc:
             logger.warning('gemini request failed type=%s', type(exc).__name__)
             raise ServiceError('ai_unavailable', 'Cannot complete the Gemini request. Check the backend connection and retry; Check my balance and Check gas still work.') from None

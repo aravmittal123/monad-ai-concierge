@@ -7,7 +7,7 @@ export type Activity = {id:string;account:string;title:string;status:'confirmed'
 export type GasData = {chain_id:number;block_number:number;gas_price_gwei:string;gas_price_wei:string;observed_at:number};
 export type ChainData = {chain_id:number; block_number:number; balance_mon:string; balance_wei:string; gas_price_gwei:string; gas_price_wei:string};
 export type Preview = {
-  preview_id:string; wallet_address:string; chain_id:number; mode:'mock'|'uniswap_v3'|'transfer';
+  preview_id:string; wallet_address:string; chain_id:number; mode:'mock'|'uniswap_v3'|'puddleswap_v2'|'transfer';
   action?:'swap'|'transfer';token?:'MON'|'USDC';amount?:string|null;recipient?:string|null;recipient_name?:string|null;min_balance_mon?:string|null;
   amount_mon:string; estimated_usdc:string; minimum_usdc:string; slippage_bps:number;
   gas_price_gwei:string; estimated_call_gas_mon:string|null; max_gas_price_gwei:string|null;
@@ -20,6 +20,6 @@ export type ChatResponse = {type:'information'|'unsupported_action'|'action_plan
   intent_source?:'command'|'gemini'|'nvidia';
   steps?:Step[];needs_step_confirmation?:boolean;
   action?:string; chain_data?:ChainData; plan?:{intent:Intent; wallet_address:string; chain_id:number}};
-export type RuntimeConfig = {chain_id:number; network:string; explorer_url:string; swap_mode:'mock'|'uniswap_v3'; max_swap_mon:string;
+export type RuntimeConfig = {chain_id:number; network:string; explorer_url:string; swap_mode:'mock'|'uniswap_v3'|'puddleswap_v2'; max_swap_mon:string;
   wallet_configured:boolean; sponsorship:boolean; activity_registry_address?:string|null};
 export type TransactionResult = {kind:'rehearsal'; approvalId:string}|{kind:'transaction'; hash:`0x${string}`; userOpHash:`0x${string}`};

@@ -1,5 +1,5 @@
 {
-  "observed_at": "2026-10-04T13:55:10.860530+00:00",
+  "observed_at": "2026-10-10T09:51:09.821046+00:00",
   "url": "https://monad-ai-concierge.vercel.app",
   "live_wallet_signature_tested": false,
   "results": [
@@ -13,7 +13,7 @@
         "gemini_model": "gemini-3.1-flash-lite",
         "ai_provider": "gemini",
         "chain_id": 10143,
-        "block_number": 68132541
+        "block_number": 69793996
       }
     },
     {
@@ -46,10 +46,10 @@
       "status": 200,
       "response": {
         "chain_id": 10143,
-        "block_number": 68132545,
+        "block_number": 69793999,
         "gas_price_wei": "102000000000",
         "gas_price_gwei": "102",
-        "observed_at": 1791122107
+        "observed_at": 1791625863
       }
     },
     {
@@ -58,14 +58,35 @@
       "response": {
         "type": "information",
         "action": "check_balance",
-        "message": "Your balance is 10 MON.",
+        "message": "Your balance is 14.51 MON.",
+        "intent_source": "gemini",
+        "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
+        "chain_data": {
+          "chain_id": 10143,
+          "block_number": 69794002,
+          "balance_wei": "14510000000000000000",
+          "balance_mon": "14.51",
+          "gas_price_wei": "102000000000",
+          "gas_price_gwei": "102",
+          "base_fee_per_gas_wei": "100000000000"
+        },
+        "requires_confirmation": false
+      }
+    },
+    {
+      "path": "/api/chat",
+      "status": 200,
+      "response": {
+        "type": "information",
+        "action": "check_balance",
+        "message": "Your balance is 14.51 MON.",
         "intent_source": "command",
         "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
         "chain_data": {
           "chain_id": 10143,
-          "block_number": 68132548,
-          "balance_wei": "10000000000000000000",
-          "balance_mon": "10",
+          "block_number": 69794004,
+          "balance_wei": "14510000000000000000",
+          "balance_mon": "14.51",
           "gas_price_wei": "102000000000",
           "gas_price_gwei": "102",
           "base_fee_per_gas_wei": "100000000000"
@@ -84,9 +105,9 @@
         "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
         "chain_data": {
           "chain_id": 10143,
-          "block_number": 68132549,
-          "balance_wei": "10000000000000000000",
-          "balance_mon": "10",
+          "block_number": 69794006,
+          "balance_wei": "14510000000000000000",
+          "balance_mon": "14.51",
           "gas_price_wei": "102000000000",
           "gas_price_gwei": "102",
           "base_fee_per_gas_wei": "100000000000"
@@ -119,9 +140,9 @@
         },
         "chain_data": {
           "chain_id": 10143,
-          "block_number": 68132551,
-          "balance_wei": "10000000000000000000",
-          "balance_mon": "10",
+          "block_number": 69794007,
+          "balance_wei": "14510000000000000000",
+          "balance_mon": "14.51",
           "gas_price_wei": "102000000000",
           "gas_price_gwei": "102",
           "base_fee_per_gas_wei": "100000000000"
@@ -157,9 +178,9 @@
         },
         "chain_data": {
           "chain_id": 10143,
-          "block_number": 68132552,
-          "balance_wei": "10000000000000000000",
-          "balance_mon": "10",
+          "block_number": 69794009,
+          "balance_wei": "14510000000000000000",
+          "balance_mon": "14.51",
           "gas_price_wei": "102000000000",
           "gas_price_gwei": "102",
           "base_fee_per_gas_wei": "100000000000"
@@ -185,7 +206,7 @@
       "status": 200,
       "response": {
         "preview": {
-          "preview_id": "ea4de68bd07b0888f9ea1699129d402d",
+          "preview_id": "527706c4129508d2cba0b1d75b74243f",
           "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
           "chain_id": 10143,
           "mode": "mock",
@@ -203,7 +224,7 @@
           "gas_price_gwei": "102",
           "estimated_call_gas_mon": null,
           "max_gas_price_gwei": null,
-          "expires_at": 1791122290,
+          "expires_at": 1791626047,
           "simulation": "mock_only",
           "transaction": null,
           "warnings": [
@@ -220,7 +241,7 @@
       "status": 200,
       "response": {
         "preview": {
-          "preview_id": "ea4de68bd07b0888f9ea1699129d402d",
+          "preview_id": "527706c4129508d2cba0b1d75b74243f",
           "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
           "chain_id": 10143,
           "mode": "mock",
@@ -238,7 +259,7 @@
           "gas_price_gwei": "102",
           "estimated_call_gas_mon": null,
           "max_gas_price_gwei": null,
-          "expires_at": 1791122290,
+          "expires_at": 1791626047,
           "simulation": "mock_only",
           "transaction": null,
           "warnings": [
@@ -248,7 +269,7 @@
           ],
           "requires_confirmation": true
         },
-        "approval_message": "Monad AI Concierge\nDEMO APPROVAL ONLY \u2014 NO FUNDS MOVE\n{\"action\":\"swap\",\"activity_id\":null,\"amount\":null,\"amount_mon\":\"1\",\"chain_id\":10143,\"estimated_call_gas_mon\":null,\"estimated_usdc\":\"0.1\",\"expires_at\":1791122290,\"gas_price_gwei\":\"102\",\"max_gas_price_gwei\":null,\"min_balance_mon\":null,\"minimum_usdc\":\"0.0995\",\"mode\":\"mock\",\"preview_id\":\"ea4de68bd07b0888f9ea1699129d402d\",\"recipient\":null,\"recipient_name\":null,\"requires_confirmation\":true,\"simulation\":\"mock_only\",\"slippage_bps\":50,\"token\":\"MON\",\"transaction\":null,\"wallet_address\":\"0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e\",\"warnings\":[\"Rehearsal only: fixed fictional rate 1 MON = 0.10 USDC.\",\"Passkey signs a demo approval; no funds move and no blockchain transaction is submitted.\",\"Gas and balance are real Monad RPC readings. No DEX simulation or real quote is claimed.\"]}"
+        "approval_message": "Monad AI Concierge\nDEMO APPROVAL ONLY \u2014 NO FUNDS MOVE\n{\"action\":\"swap\",\"activity_id\":null,\"amount\":null,\"amount_mon\":\"1\",\"chain_id\":10143,\"estimated_call_gas_mon\":null,\"estimated_usdc\":\"0.1\",\"expires_at\":1791626047,\"gas_price_gwei\":\"102\",\"max_gas_price_gwei\":null,\"min_balance_mon\":null,\"minimum_usdc\":\"0.0995\",\"mode\":\"mock\",\"preview_id\":\"527706c4129508d2cba0b1d75b74243f\",\"recipient\":null,\"recipient_name\":null,\"requires_confirmation\":true,\"simulation\":\"mock_only\",\"slippage_bps\":50,\"token\":\"MON\",\"transaction\":null,\"wallet_address\":\"0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e\",\"warnings\":[\"Rehearsal only: fixed fictional rate 1 MON = 0.10 USDC.\",\"Passkey signs a demo approval; no funds move and no blockchain transaction is submitted.\",\"Gas and balance are real Monad RPC readings. No DEX simulation or real quote is claimed.\"]}"
       }
     },
     {
@@ -256,7 +277,7 @@
       "status": 200,
       "response": {
         "preview": {
-          "preview_id": "a92e9b15bfc530c9d7aac10e2218ae94",
+          "preview_id": "8975499992601d5934fd709658bf3d02",
           "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
           "chain_id": 10143,
           "mode": "transfer",
@@ -274,7 +295,7 @@
           "gas_price_gwei": "102",
           "estimated_call_gas_mon": "0.002142",
           "max_gas_price_gwei": null,
-          "expires_at": 1791122291,
+          "expires_at": 1791626048,
           "simulation": "rpc_call_passed",
           "transaction": {
             "to": "0x2222222222222222222222222222222222222222",
@@ -295,7 +316,7 @@
       "status": 200,
       "response": {
         "preview": {
-          "preview_id": "a92e9b15bfc530c9d7aac10e2218ae94",
+          "preview_id": "8975499992601d5934fd709658bf3d02",
           "wallet_address": "0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e",
           "chain_id": 10143,
           "mode": "transfer",
@@ -313,7 +334,7 @@
           "gas_price_gwei": "102",
           "estimated_call_gas_mon": "0.002142",
           "max_gas_price_gwei": null,
-          "expires_at": 1791122291,
+          "expires_at": 1791626048,
           "simulation": "rpc_call_passed",
           "transaction": {
             "data": "0x",

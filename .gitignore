@@ -13,6 +13,6 @@ playwright-report/
 test-results/
 *.tsbuildinfo
 .vercel/
-screenshots/
 !.github/
 .vitest/
+/research/

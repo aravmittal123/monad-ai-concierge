@@ -15,6 +15,7 @@ from app.constants.tokens import DEX, TOKEN_REGISTRY, WMON
 from app.errors import ServiceError
 from app.schemas import TransactionPreview
 from app.services.monad import units
+from app.services.puddleswap import build_swap
 from app.services.transfers import resolve_recipient, transfer_call
 
 logger = logging.getLogger(__name__)
@@ -95,9 +96,10 @@ class TransactionService:
                         'Passkey signs a demo approval; no funds move and no blockchain transaction is submitted.',
                         'Gas and balance are real Monad RPC readings. No DEX simulation or real quote is claimed.']
         else:
-            output, minimum, tx, gas_mon = self.build_real(body, snapshot, expiry)
+            output, minimum, tx, gas_mon = (build_swap(self.monad, body, snapshot, expiry) if self.settings.swap_mode == 'puddleswap_v2' else self.build_real(body, snapshot, expiry))
             simulation = 'rpc_call_passed'
-            warnings = ['Testnet tokens only.', 'Call gas excludes account deployment, verification and bundler overhead.',
+            warnings = ['REAL TESTNET SWAP: MON leaves your account; USDC is delivered to this same account.',
+                        'Route: PuddleSwap V2 MON / USDC (unaudited testnet DEX).' if self.settings.swap_mode == 'puddleswap_v2' else 'Route: Uniswap V3.', 'Call gas excludes account deployment, verification and bundler overhead.',
                         'The wallet must estimate the full UserOperation before you confirm. State can change after simulation.']
         preview = TransactionPreview(
             preview_id=secrets.token_hex(16), wallet_address=body.wallet_address, chain_id=10143,
@@ -187,5 +189,7 @@ class TransactionService:
             except Exception:
                 raise ServiceError('simulation_failed', 'Fresh simulation failed. Request a new preview.', 409) from None
         data = preview.model_dump()
+        if preview.transaction:
+            return {'preview': data, 'approval_message': 'REAL TESTNET SWAP — requires transaction approval'}
         return {'preview': data, 'approval_message': 'Monad AI Concierge\nDEMO APPROVAL ONLY — NO FUNDS MOVE\n' +
                 json.dumps(data, sort_keys=True, separators=(',', ':'))}

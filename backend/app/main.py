@@ -102,7 +102,13 @@ def create_app(settings=None, gemini=None, monad=None):
         intent, source = resolve_intent(body.prompt, ai, settings.ai_provider)
         validate_prompt_policy(body.prompt, intent)
         if intent.action == 'explain':
-            return {'type':'information', 'message':ANSWERS[intent.params.topic], 'intent_source':source,
+            answer = ANSWERS[intent.params.topic]
+            if settings.swap_mode == 'puddleswap_v2':
+                if intent.params.topic == 'swaps':
+                    answer = 'Swaps exchange MON for Circle testnet USDC through PuddleSwap V2. Review the live quote, minimum USDC received, slippage limit and wallet fee, then approve with your passkey. USDC arrives in this same account after a successful receipt. Only MON to USDC is supported. This is an unaudited testnet DEX; test tokens have no bank-dollar value. A balance condition pauses for your confirmation before preparing the swap.'
+                elif intent.params.topic == 'capabilities':
+                    answer = answer.replace('demonstrate MON-to-USDC swaps', 'prepare live MON-to-USDC testnet swaps')
+            return {'type':'information', 'message':answer, 'intent_source':source,
                     'requires_confirmation':False, 'answer_source':'product_guide'}
         if intent.action == 'unsupported_action':
             return {'type': 'unsupported_action', 'message': 'I cannot safely carry out that request. I support MON/USDC balance checks, live gas, contact transfers, demo swaps and wallet explanations. Ask What can you do? for examples. USD is ambiguous; use USDC for a testnet token. Investment predictions, bank payouts and unattended payments are not supported.',
@@ -124,6 +130,9 @@ def create_app(settings=None, gemini=None, monad=None):
             intent = SwapIntent(action='swap', params=intent.params)
         if intent.action == 'transfer':
             resolve_recipient(intent.params.recipient, body.contacts)
+            available = snapshot['balance_mon'] if intent.params.token == 'MON' else rpc.usdc_balance(body.wallet_address, snapshot['block_number'])
+            if Decimal(intent.params.amount) > Decimal(available):
+                raise ServiceError('insufficient_balance', f'You have {available} {intent.params.token}, but requested {intent.params.amount} {intent.params.token}. Reduce the amount or fund this account. Unsponsored fees also require MON.', 409)
         if intent.action in ('swap', 'transfer'):
             plan = ActionPlan(intent=intent, wallet_address=body.wallet_address, chain_id=snapshot['chain_id'])
             return {'type': 'action_plan', 'plan': plan.model_dump(), 'chain_data': snapshot, 'intent_source': source,
@@ -150,6 +159,12 @@ def create_app(settings=None, gemini=None, monad=None):
     @app.post('/api/account')
     def account(body: ChatRequest):
         return rpc.snapshot(body.wallet_address)
+
+    @app.post('/api/tokens')
+    def tokens(body: ChatRequest):
+        snapshot = rpc.snapshot(body.wallet_address)
+        return {'usdc': rpc.usdc_balance(body.wallet_address, snapshot['block_number']),
+                'block_number': snapshot['block_number']}
 
     @app.get('/api/gas')
     def gas():

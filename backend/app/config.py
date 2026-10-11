@@ -20,13 +20,11 @@ class Settings(BaseSettings):
     nvidia_timeout_seconds: float = Field(default=20, gt=0, le=30)
     rpc_timeout_seconds: float = Field(default=8, gt=0, le=30)
     gemini_timeout_seconds: float = Field(default=20, gt=0, le=60)
-    swap_mode: Literal['mock', 'uniswap_v3'] = 'mock'
+    swap_mode: Literal['mock', 'uniswap_v3', 'puddleswap_v2'] = 'mock'
     preview_secret: SecretStr = SecretStr('')
     api_access_token: SecretStr = SecretStr('')
     require_api_token: bool = False
     preview_ttl_seconds: int = Field(default=180, ge=30, le=300)
     max_swap_mon: str = '10'
-    max_transfer_mon: str = '10'
-    max_transfer_usdc: str = '1000'
     activity_registry_address: str = ''
     rate_limit_per_minute: int = Field(default=20, ge=1, le=120)

@@ -125,7 +125,7 @@ def test_timeout():
 def test_quota():
     client, _, _ = make_client(ai_error=errors.ClientError(429, {'error': {'message': 'secret'}}))
     response = post(client)
-    assert response.status_code == 503
+    assert response.status_code == 429
     assert response.json()['error']['code'] == 'ai_rate_limited'
     assert 'secret' not in response.text
 

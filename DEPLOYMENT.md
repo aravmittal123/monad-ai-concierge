@@ -1,3 +1,5 @@
+Current release: see [RELEASE_OCT11.md](RELEASE_OCT11.md). Production and local configuration now enable real MON-to-USDC swaps via PuddleSwap V2. Older demo-mode notes below are historical.
+
 # Deployment and passkey setup
 
 Public app: https://monad-ai-concierge.vercel.app  
@@ -5,7 +7,7 @@ Backend health: https://monad-ai-concierge-api.vercel.app/health
 
 Both projects are deployed to the signed-in Vercel account. Production API calls require a server-only gateway token. `/health` is public. Do not paste API keys or provider URLs in chat.
 
-**October 3 status:** updated code and saved provider URLs are deployed; real Gemini/chat/RPC/preview checks pass. The current ZeroDev project returns `localhost` as the registration RP ID, so production passkeys are blocked until its passkey domain is configured for `monad-ai-concierge.vercel.app`. Use a separate project/configuration for production if you want to preserve localhost testing. Changing RP ID does not migrate existing credentials. Local virtual-authenticator creation/recovery passes.
+**October 10 status:** production virtual-authenticator registration/recovery and bundler fee simulation pass. Gemini live response and conditional commands pass. Production uses a separate ZeroDev project. The dashboard accepted `https://monad-ai-concierge.vercel.app` in Passkey Domain and normalized its WebAuthn RP ID to the hostname. RPC ACL needs the exact origin without a trailing slash. Local credentials remain separate. See RELEASE_OCT10.md for verification and limitations.
 
 ## Finish the live wallet integration
 
@@ -14,10 +16,10 @@ Both projects are deployed to the signed-in Vercel account. Production API calls
 3. In `frontend/.env.local`, fill `ZERODEV_RPC_URL` with the project bundler RPC URL and `ZERODEV_PASSKEY_SERVER_URL` with its passkey server base URL. Leave sponsorship disabled initially. Keep `BACKEND_URL` pointing to the local backend for local development.
 4. Run `pwsh -File scripts/check-config.ps1`. It prints SET/MISSING without revealing values. Tell the coding agent when both URLs are saved; it can upload them as server-only production variables and redeploy.
 5. On the public site, create a passkey using your device. Copy the displayed smart account address and fund it with testnet MON from https://faucet.monad.xyz. Check its balance through the app.
-6. Request `Swap 1 MON to USDC`, review the rehearsal notice, cancel once, prepare again, then confirm with passkey. Expected result: **rehearsal approved**, no funds moved and no transaction hash.
+6. Request `Swap 1 MON to USDC`, review REAL TESTNET SWAP, minimum received and the full fee, cancel once, prepare again, then approve with your passkey. Wait for a successful receipt and refresh USDC.
 7. Disconnect, choose Continue with Passkey, and verify recovery returns the same account. The browser never persists the signer in localStorage.
 
-Only the user can complete a real device passkey interaction. Live ZeroDev registration and recovery passed locally with a Chromium virtual authenticator. A physical-device signature and funded rehearsal approval remain pending.
+Only the user can complete a real device passkey interaction. Live ZeroDev registration and recovery passed locally with a Chromium virtual authenticator. A physical-device signature and funded transaction approval remain pending.
 
 ## Reproducible deployment
 
@@ -32,7 +34,7 @@ Backend production variables:
 | `API_ACCESS_TOKEN` | Random secret of at least 32 characters, sensitive |
 | `PREVIEW_SECRET` | A separate random secret of at least 32 characters, sensitive |
 | `REQUIRE_API_TOKEN` | `true` |
-| `SWAP_MODE` | `mock` |
+| `SWAP_MODE` | `puddleswap_v2` |
 | `MONAD_RPC_URL` | `https://testnet-rpc.monad.xyz` |
 
 Frontend production variables:
@@ -48,7 +50,7 @@ Frontend production variables:
 
 Use the Vercel dashboard for secret entry or pipe a local value to `vercel env add NAME production --sensitive --force --yes`. Never put secrets in shell arguments, commits, `NEXT_PUBLIC_*`, or screenshots. Environment changes require redeployment.
 
-For these already-linked projects, `pwsh -File scripts/sync-production-env.ps1 -Deploy` reads the local files, checks all required values, uploads secrets through stdin and redeploys both projects. It keeps swaps in rehearsal mode, uploads optional transfer/registry settings, and preserves the configured SPONSOR_GAS flag (false unless explicitly enabled). Transfers are independently real testnet operations. The Telegram token and dedicated contract deployer key are never uploaded by this helper.
+For these already-linked projects, `pwsh -File scripts/sync-production-env.ps1 -Deploy` reads the local files, checks all required values, uploads secrets through stdin and redeploys both projects. It preserves the configured swap mode, uploads optional transfer/registry settings, and preserves the configured SPONSOR_GAS flag (false unless explicitly enabled). Transfers are independently real testnet operations. The Telegram token and dedicated contract deployer key are never uploaded by this helper.
 
 ```powershell
 cd backend
@@ -59,7 +61,7 @@ cd ..
 .\backend\.venv\Scripts\python.exe scripts/production-smoke.py
 ```
 
-The smoke script uses exact commands and the public address from the retained prototype. Add `--ai` to test one natural-language request through the configured provider. It reads real data, checks the gas safeguard, prepares/revalidates a rehearsal and checks blocked RPC methods. It never signs or submits anything. It assumes that address still has at least 1 testnet MON. Optional NVIDIA configuration and local restart instructions are in RUN_LOCAL.md; the deployment helper uploads the selected provider's key only.
+The smoke script uses exact commands and the public address from the retained prototype. Add `--ai` to test one natural-language request through the configured provider. It reads real data, checks the gas safeguard, prepares/revalidates an unsigned swap preview and checks blocked RPC methods. It never signs or submits anything. It assumes that address still has at least 1 testnet MON. Optional NVIDIA configuration and local restart instructions are in RUN_LOCAL.md; the deployment helper uploads the selected provider's key only.
 
 ## Operations
 

@@ -25,3 +25,19 @@
 .prompt-group{margin-top:22px}.prompt-group h3{font-size:13px;color:var(--muted);margin-bottom:10px}.example-prompt{display:block;width:100%;text-align:left;padding:10px 12px;margin:5px 0;border:1px solid var(--border);border-radius:9px;font-size:13px;background:transparent;color:inherit;cursor:pointer}.example-prompt:hover{border-color:#a78bfa;background:#a78bfa12}.composer-hint{gap:10px}.composer-hint .text-button{font-size:12px}
 
 .voice-listening{position:absolute;bottom:46px;right:0;font-size:12px;color:var(--muted);white-space:nowrap}.voice-feedback{pointer-events:auto}.voice-feedback .text-button{display:block;margin-top:6px}.reply-revealing::after{content:'';display:inline-block;width:6px;height:14px;margin-left:3px;background:currentColor;vertical-align:baseline;animation:reply-caret .8s ease-in-out infinite}.simulation-receipt{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);margin-top:10px}@keyframes reply-caret{50%{opacity:.15}}@media(prefers-reduced-motion:reduce){.reply-revealing::after{animation:none}}
+/* Decorative 3D wallet nucleus: perspective geometry, no external renderer. */
+.orb-stage{position:relative;width:240px;height:175px;margin:0 auto 12px;perspective:650px;isolation:isolate}
+.orb-tilt{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform .25s ease-out}
+.orb-core{position:absolute;left:77px;top:37px;width:86px;height:86px;border-radius:30px;display:grid;place-items:center;transform:rotate(-13deg) translateZ(22px);background:radial-gradient(circle at 25% 15%,#e4d8ff,#9e75f5 42%,#4a218a 90%);box-shadow:inset 2px 3px 8px #fff9,inset -8px -12px 20px #27144988,0 0 45px #a47aff44;animation:orb-float 6s ease-in-out infinite}
+.orb-core>span{font-size:60px;font-weight:800;color:#201133;letter-spacing:-6px;line-height:1}.orb-core>span>span{font-size:23px;position:absolute;top:5px;right:10px;color:#f5edff;letter-spacing:0}
+.orb-orbit{position:absolute;left:17px;top:4px;width:206px;height:154px;border:1px solid #bc99ff88;border-radius:50%;transform-style:preserve-3d;box-shadow:0 0 14px #9874ed22}
+.orbit-one{transform:rotateX(65deg) rotateZ(-25deg);animation:orb-turn 18s linear infinite}.orbit-two{transform:rotateY(62deg) rotateZ(35deg);border-color:#a6e7dd55}.orbit-three{transform:rotateY(-60deg) rotateZ(-35deg);border-style:dashed;border-color:#ac83ef44}
+.orb-orbit i{position:absolute;top:20px;left:23px;width:8px;height:8px;border-radius:50%;background:#d4bdff;box-shadow:0 0 13px #c9a8ff}.orbit-two i{background:#a6f2df;top:auto;bottom:22px;left:auto;right:22px}
+.orb-shadow{position:absolute;bottom:2px;left:50px;width:140px;height:17px;border-radius:50%;background:#9464dd55;filter:blur(13px)}
+@keyframes orb-float{50%{transform:rotate(-8deg) translateZ(32px) translateY(-7px)}}
+@keyframes orb-turn{to{transform:rotateX(65deg) rotateZ(335deg)}}
+[data-theme=light] .orb-shadow{background:#8058c344}
+@media(max-width:760px){.orb-stage{height:175px;width:240px;transform:scale(.78);margin-top:-18px;margin-bottom:0}}
+@media(max-width:760px) and (max-height:730px){.orb-stage{display:none}}
+@media(prefers-reduced-motion:reduce){.orb-core,.orb-orbit{animation:none}.orb-tilt{transform:none;transition:none}}
+.spoken-controls{display:flex;align-items:center;gap:3px;max-width:100%;flex-wrap:wrap}.spoken-controls select{font:inherit;font-size:10px;max-width:145px;background:var(--panel,#181625);color:inherit;border:1px solid #8e70bb55;border-radius:8px;padding:5px}.spoken-controls small{font-size:10px;color:#e0a469}.spoken-controls button[aria-pressed=true]{color:#ba9fff;background:#a179ff14}.preview-dialog>.spoken-controls{margin-top:15px}.preview-dialog>.spoken-controls select{max-width:240px}@media(max-width:760px){.composer-buttons{flex-wrap:wrap;justify-content:flex-end}.spoken-controls select{max-width:110px}.spoken-controls .icon-button{padding:5px}}

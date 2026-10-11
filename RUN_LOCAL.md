@@ -32,10 +32,10 @@ Alternatively, with both ports free, run `pwsh -File scripts/start.ps1` from the
 4. Ask `Check my balance`, then `Check gas`. These exact commands read the real chain without needing Gemini. Zero balance on a new wallet is normal.
 5. Ask `How much MON do I currently hold?` to test Gemini. The response must say **Intent interpreted by Gemini**. The balance still comes from RPC.
 6. With at least 1 testnet MON in this smart account, ask `Swap 1 MON to USDC only if gas is below 1 gwei`. When live gas is above that limit, approval must be blocked.
-7. Ask `Swap 1 MON to USDC`, review the rehearsal label, cancel once, then prepare again and confirm with your passkey. This is a fictional quote; no funds move.
+7. Ask `Swap 0.01 MON to USDC`, review REAL TESTNET SWAP, minimum received and the full fee, cancel once, then prepare again and approve with your passkey. Wait for a successful receipt and refresh USDC.
 8. Disconnect and choose **Connect Wallet → Log In**. It should recover the same smart account.
 
-For real family payments, open **Saved contacts** in the account card, save the verified recipient address, and ask `Send 0.001 MON to Father` or `Send 1 USDC to Daughter`. Review the complete recipient address and fee, check the recipient confirmation box, then approve with the passkey. These transfers move real testnet tokens; swaps remain demos. See ADVANCEMENTS.md for sponsorship, Telegram, the optional on-chain activity contract, PWA and the two-step workflow.
+For real family payments, open **Saved contacts** in the account card, save the verified recipient address, and ask `Send 0.001 MON to Father` or `Send 1 USDC to Daughter`. Review the complete recipient address and fee, check the recipient confirmation box, then approve with the passkey. These transfers move real testnet tokens; current MON-to-USDC swaps also move real testnet tokens. See ADVANCEMENTS.md for sponsorship, Telegram, the optional on-chain activity contract, PWA and the two-step workflow.
 
 To test reads before creating a passkey, choose **Connect Wallet → Try Demo Account**. It selects `0xdA6bEa0b5FCc4A3e46075f68E247f17d13A0899e`, the public address from the existing project. It grants no signing access. Its balance can change.
 
@@ -59,4 +59,4 @@ pwsh -File scripts/check-config.ps1
 .\backend\.venv\Scripts\python.exe scripts/production-smoke.py --url http://localhost:3000 --ai
 ```
 
-The smoke test checks real reads, one Gemini interpretation, policy blocking and unsigned rehearsal previews. It never approves or sends a transaction. It assumes the public test address has at least 1 MON.
+The smoke test checks real reads, one Gemini interpretation, policy blocking and unsigned swap previews. It never approves or sends a transaction. It assumes the public test address has at least 1 MON.

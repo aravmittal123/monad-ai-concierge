@@ -39,11 +39,11 @@ foreach ($name in @($taskKeyName,'API_ACCESS_TOKEN','PREVIEW_SECRET')) {
     Set-TaskProductionEnv $taskBackend $name $taskBackendValues[$name]
 }
 Set-TaskProductionEnv $taskBackend 'AI_PROVIDER' $taskProvider
-foreach ($name in @('GEMINI_MODEL','NVIDIA_MODEL','ACTIVITY_REGISTRY_ADDRESS','MAX_TRANSFER_MON','MAX_TRANSFER_USDC')) {
+foreach ($name in @('GEMINI_MODEL','NVIDIA_MODEL','ACTIVITY_REGISTRY_ADDRESS')) {
     if ($taskBackendValues[$name]) { Set-TaskProductionEnv $taskBackend $name $taskBackendValues[$name] }
 }
 Set-TaskProductionEnv $taskBackend 'REQUIRE_API_TOKEN' 'true'
-Set-TaskProductionEnv $taskBackend 'SWAP_MODE' 'mock'
+Set-TaskProductionEnv $taskBackend 'SWAP_MODE' $(if ($taskBackendValues['SWAP_MODE']) { $taskBackendValues['SWAP_MODE'] } else { 'mock' })
 Set-TaskProductionEnv $taskFrontend 'BACKEND_API_TOKEN' $taskBackendValues['API_ACCESS_TOKEN']
 Set-TaskProductionEnv $taskFrontend 'BACKEND_URL' 'https://monad-ai-concierge-api.vercel.app'
 foreach ($name in @('ZERODEV_RPC_URL','ZERODEV_PASSKEY_SERVER_URL')) {

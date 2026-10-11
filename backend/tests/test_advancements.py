@@ -75,7 +75,7 @@ def test_usdc_uses_exact_6_decimal_units_and_no_native_value():
     node.w3.eth.contract.return_value.encode_abi.assert_called_once_with('transfer',args=[RECIPIENT,1234567])
 
 
-@pytest.mark.parametrize('token,amount,code',[('USDC','0.0000001','token_precision'),('MON','11','amount_limit'),('USDC','1001','amount_limit')])
+@pytest.mark.parametrize('token,amount,code',[('USDC','0.0000001','token_precision'),('MON','11','insufficient_balance'),('USDC','1001','insufficient_balance')])
 def test_transfer_precision_and_limits(token,amount,code):
     with pytest.raises(ServiceError,match=code):
         TransactionService(SETTINGS,rpc()).prepare(transfer(token,amount))
@@ -152,3 +152,40 @@ def test_telegram_uses_live_reads_and_never_executes_transfers():
     reply,_=command_reply('/send 1 MON to Father',wallet,call,'https://example.com')
     assert '?intent=Send' in reply and 'No action has been sent' in reply
     call.assert_not_called()
+
+@pytest.mark.parametrize('prompt',[
+ 'check my balance, if I have MON more than 5, then swap 2 MON with USDC',
+ 'check my balance if I have MON more than 3, then swap 2 MON to USDC',
+ 'check my balance, and if I have more than 5 MON, swap 2 it USDC',
+ 'check my balance, if I have more than 5 MON, then swap 2 into USDC',
+])
+def test_workflow_variants_without_ai(prompt):
+    ai=Mock();ai.extract.side_effect=AssertionError('Must not call AI')
+    node=rpc();client=TestClient(create_app(SETTINGS,gemini=ai,monad=node))
+    response=client.post('/api/chat',json={'prompt':prompt,'wallet_address':SENDER})
+    assert response.status_code==200, response.text
+    assert response.json()['needs_step_confirmation'] is True
+    assert response.json()['plan']['intent']['params']['amount']=='2'
+    ai.extract.assert_not_called()
+
+@pytest.mark.parametrize('suffix',[' and send 1 MON to Father',' unless gas is high',' or swap 3 MON to USDC'])
+def test_workflow_variants_never_drop_trailing_conditions(suffix):
+    prompt='check my balance, if I have MON more than 5, then swap 2 MON with USDC'+suffix
+    assert direct_intent(prompt) is None
+
+def test_large_transfer_allowed_when_funded():
+    node=rpc();node.snapshot.return_value={**SNAPSHOT,'balance_mon':'100','balance_wei':str(100*10**18)}
+    p=TransactionService(SETTINGS,node).prepare(transfer(amount='50'))['preview']
+    assert p['transaction']['value']==str(50*10**18)
+
+def test_over_balance_chat_never_promises_preview():
+    client=TestClient(create_app(SETTINGS,monad=rpc()))
+    response=client.post('/api/chat',json={'prompt':'Send 50 MON to Father','wallet_address':SENDER,'contacts':[{'name':'Father','address':RECIPIENT}]})
+    assert response.status_code==409
+    assert '10 MON' in response.json()['error']['message']
+    assert response.json()['error']['code']=='insufficient_balance'
+
+def test_token_endpoint_reads_chain_balance():
+    node=rpc();node.usdc_balance.return_value='2.5'
+    response=TestClient(create_app(SETTINGS,monad=node)).post('/api/tokens',json={'prompt':'Read tokens','wallet_address':SENDER})
+    assert response.json()=={'usdc':'2.5','block_number':100}

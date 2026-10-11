@@ -16,7 +16,7 @@
 | Real transfers + contacts | MON and Circle testnet USDC, exact amounts, full recipient address, explicit recipient acknowledgement, RPC simulation, full UserOperation fee estimate and passkey signature. Contact names resolve from this browser's saved address book, never from AI guesses. |
 | UI | Two columns, header Connect Wallet modal, quick-action chips, animated purple glow, glass panels, gradient headline, loading shimmer, message transitions, success glow, dark/light themes, mobile drawer, Ctrl/Cmd+K, copy address, concise footer and demo guide icon |
 
-**Swaps remain demos by default. Transfers move actual testnet tokens.** A successful simulation is not a completed transfer. A real success requires a successful mined UserOperation receipt.
+**Current release: MON-to-USDC swaps and transfers move real testnet tokens. Optional mock swaps remain explicitly labelled.** A successful simulation is not a completed transfer. A real success requires a successful mined UserOperation receipt.
 
 ## Test a family payment
 
@@ -27,7 +27,7 @@
 5. Wait for the actual receipt. Open its explorer link in Recent Activity. If it stays pending, use **Check receipt** instead of sending it again.
 6. For USDC, use `Send 1 USDC to Father`. `USD` alone is intentionally ambiguous and not accepted as USDC. The allowlisted Circle contract is `0x534b2f3A21130d7a60830c2Df862319e593943A3` with 6 decimals; runtime code and decimals are checked before preparation.
 
-Read-only Demo Account cannot sign. Default caps: 10 MON / 1,000 testnet USDC per transfer. These are configurable server limits, not market or fiat valuations.
+Read-only Demo Account cannot sign. Current transfers have no fixed 10 MON / 1,000 USDC ceiling. Positive amounts, precision, actual balance and full fees are checked.
 
 ## Activate sponsorship
 
@@ -74,7 +74,7 @@ This is not an ERC-8004 implementation. The competition brief presents ERC-8004 
 
 ## External setup still needed for live acceptance
 
-- The current ZeroDev project returns `localhost` in registration options. The deployed site needs a project passkey domain of `monad-ai-concierge.vercel.app`; use separate configuration if you want both local and production environments. Do not transfer localhost credentials across domains.
+- Production now uses a separately configured ZeroDev project. Virtual-authenticator registration and recovery pass on the deployed hostname. Localhost credentials remain separate.
 - A real physical passkey, a funded smart account and an actual recipient are needed for a complete signed transfer acceptance test. Automated registration/recovery uses a virtual authenticator; no user's funds were sent during development.
 - Sponsorship, Telegram and public-chain activity-contract deployment remain inactive without the owner's credentials/policy/deployer funds. Their code paths are implemented and tested to the extent stated above.
 - Voice depends on browser support. Mobile browser emulation does not prove physical phone passkey/installation behavior: https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition.

@@ -69,7 +69,7 @@ async function handle(request:NextRequest,{params}:{params:Promise<{path:string[
       return result;
     }
     const getAllowed=['health','config','gas'];
-    const postAllowed=['chat','account','prepare','revalidate','activity'];
+    const postAllowed=['chat','account','tokens','prepare','revalidate','activity'];
     if(path.length!==1 || !(request.method==='GET'?getAllowed:postAllowed).includes(name)) return fail('not_found','Endpoint not found.',404);
     if(request.method==='POST' && JSON.stringify(body).length>16000)return fail('body_too_large','Request too large.',413);
     const response=await backend(name==='health'?'health':`api/${name}`,body);

@@ -38,8 +38,9 @@ def transfer_fields(prompt):
     except ValidationError:
         return None
 
-WORKFLOW_PATTERN = (r'check my balance,?\s+and if i have more than ([0-9]+(?:\.[0-9]+)?) mon,?\s+'
-    r'swap ([0-9]+(?:\.[0-9]+)?)(?: mon)? to usdc[.!]?')
+WORKFLOW_PATTERN = (r'check my balance,?\s+(?:and )?if i have (?:mon )?(?:more than|above|over) '
+    r'([0-9]+(?:\.[0-9]+)?)(?: mon)?,?\s+(?:then )?'
+    r'swap ([0-9]+(?:\.[0-9]+)?)(?: mon)? (?:to|into|with|it) usdc[.!]?')
 
 
 def direct_intent(prompt: str):

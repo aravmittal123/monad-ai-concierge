@@ -30,14 +30,15 @@ def transfer_call(settings, monad, sender, recipient, token, amount, gas_limit, 
     with localcontext() as ctx:
         ctx.prec = 100
         quantity = Decimal(amount)
-        cap = Decimal(settings.max_transfer_mon if token == 'MON' else settings.max_transfer_usdc)
-        if quantity <= 0 or quantity > cap:
-            raise ServiceError('amount_limit', f'Testnet transfers must be above zero and at most {cap} {token}.', 400)
+        if quantity <= 0:
+            raise ServiceError('amount_limit', 'Transfer amount must be above zero.', 400)
         decimals = TOKEN_REGISTRY[token]['decimals']
         scaled = quantity * 10**decimals
         if scaled != scaled.to_integral_value():
             raise ServiceError('token_precision', f'{token} supports at most {decimals} decimal places.', 400)
         amount_units = int(scaled)
+        if amount_units >= 2**256:
+            raise ServiceError('amount_limit', 'Amount exceeds the token integer range.', 400)
     if gas_limit and Decimal(snapshot['gas_price_gwei']) >= Decimal(gas_limit):
         raise ServiceError('gas_limit_exceeded', 'Current gas is at or above your limit. Nothing was signed or sent.', 409)
     w3 = monad.w3
